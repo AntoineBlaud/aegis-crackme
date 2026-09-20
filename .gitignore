@@ -1,0 +1,20 @@
+# Generated build artifacts -- only sources are tracked.
+build/
+*.obj
+*.exe
+*.map
+*.pdb
+*.dll
+__pycache__/
+
+# .map is doubly sensitive here: besides being a build artifact, it's a
+# complete function-name/address roadmap of every checkpoint -- never
+# committed, never distributed alongside a protected binary.
+
+# vmprotect/ stays local-only: it pulls in a real VMProtectSDK64.dll and
+# produces multi-MB protected .exe artifacts specific to this machine's
+# VMProtect checkout. The two release binaries (plain + VMProtect-
+# protected) are published as GitHub Release assets instead of committed
+# here -- see the repo's Releases page.
+vmprotect/
+
