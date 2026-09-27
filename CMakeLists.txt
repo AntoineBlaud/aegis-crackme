@@ -13,6 +13,7 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 option(AEGIS_WITH_VMPROTECT "Include VMProtect SDK markers (needs your own VMProtectSDK.h/.lib -- see vmprotect/README.md)" OFF)
+option(AEGIS_WITH_THEMIDA "Include Code Virtualizer/Themida SDK markers (needs your own VirtualizerSDK.h/.lib -- see themida/README.md)" OFF)
 
 add_executable(aegis
     src/main.c
@@ -60,5 +61,25 @@ if (AEGIS_WITH_VMPROTECT)
             "pass -DVMPROTECT_SDK_DIR=\"C:/path/to/VMProtect/SDK/C\" "
             "(the folder containing VMProtectSDK.h and the .lib files from "
             "your own VMProtect install). See vmprotect/README.md.")
+    endif()
+endif()
+
+if (AEGIS_WITH_THEMIDA)
+    target_compile_definitions(aegis PRIVATE AEGIS_WITH_THEMIDA)
+    if (DEFINED THEMIDA_SDK_INCLUDE_DIR AND DEFINED THEMIDA_SDK_LIB_DIR)
+        target_include_directories(aegis PRIVATE "${THEMIDA_SDK_INCLUDE_DIR}")
+        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            target_link_libraries(aegis PRIVATE "${THEMIDA_SDK_LIB_DIR}/VirtualizerSDK64.lib")
+        else()
+            target_link_libraries(aegis PRIVATE "${THEMIDA_SDK_LIB_DIR}/VirtualizerSDK32.lib")
+        endif()
+    else()
+        message(WARNING
+            "AEGIS_WITH_THEMIDA is ON but THEMIDA_SDK_INCLUDE_DIR/"
+            "THEMIDA_SDK_LIB_DIR are not set -- pass "
+            "-DTHEMIDA_SDK_INCLUDE_DIR=\"C:/path/to/VirtualizerDemo/Include/C\" "
+            "-DTHEMIDA_SDK_LIB_DIR=\"C:/path/to/VirtualizerDemo/Lib/x86_x64/windows/COFF\" "
+            "(from your own Code Virtualizer / Themida install). See "
+            "themida/README.md.")
     endif()
 endif()

@@ -11,10 +11,11 @@
  * near any of the checks themselves.
  *
  * This binary is meant to be built once as-is, then optionally run
- * through VMProtect for an additional, real commercial-grade layer on
- * top (see src/vmp_markers.h; a pre-built protected release is on this
- * repo's Releases page) -- the combination is the actual target: reverse
- * the custom VM first, then the commercial one.
+ * through VMProtect or Themida/Code Virtualizer for an additional, real
+ * commercial-grade layer on top (see src/vmp_markers.h and
+ * src/themida_markers.h; a pre-built VMProtect release is on this repo's
+ * Releases page) -- the combination is the actual target: reverse the
+ * custom VM first, then the commercial one.
  */
 #include <stdio.h>
 #include <string.h>
@@ -25,6 +26,7 @@
 #include "integrity.h"
 #include "bytecode_license.h"
 #include "vmp_markers.h"
+#include "themida_markers.h"
 
 typedef void (*checkpoint_fn)(void);
 
@@ -54,9 +56,11 @@ __attribute__((noinline))
 static void run_all_checkpoints(void) {
     size_t i;
     AEGIS_VMP_BEGIN("CheckLicense");
+    AEGIS_THEMIDA_BEGIN("CheckLicense");
     for (i = 0; i < sizeof(g_checkpoints) / sizeof(g_checkpoints[0]); i++) {
         g_checkpoints[i]();
     }
+    AEGIS_THEMIDA_END();
     AEGIS_VMP_END();
 }
 

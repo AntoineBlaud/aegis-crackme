@@ -18,3 +18,8 @@ __pycache__/
 # here -- see the repo's Releases page.
 vmprotect/
 
+# themida/ stays local-only for the same reason as vmprotect/ above: it
+# pulls in a real VirtualizerSDK64.dll/.cvp project specific to this
+# machine's Code Virtualizer / Themida checkout.
+themida/
+
